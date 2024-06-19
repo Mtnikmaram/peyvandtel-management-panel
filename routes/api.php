@@ -1,8 +1,16 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Auth\Peyvandtel\LoginController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+//============================ PEYVANDTEL ============================
+Route::prefix('peyvandtel')->name('peyvandtel.')->group(function () {
+
+    //authentication
+    Route::prefix('auth')->name('auth.')->group(function () {
+        Route::prefix('login')->controller(LoginController::class)->name('login.')->group(function () {
+            Route::post('/', 'login')->name('login');
+        });
+    });
+
+});

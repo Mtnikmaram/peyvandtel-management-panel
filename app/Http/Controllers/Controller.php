@@ -9,8 +9,9 @@ namespace App\Http\Controllers;
  *     description="Peyvandtel Management Panel Api Documentation",
  *     @OA\Contact(
  *         name="Peyvandtel",
- *         email="info@peyvandtel.ir"
- *     ),
+ *         url="https://peyvandtel.com",
+ *         email="info@peyvandtel.com"
+ *     )
  * ),
  * @OA\Server(
  *     url="/api",
