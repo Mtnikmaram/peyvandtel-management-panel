@@ -11,10 +11,41 @@ class PeyvandtelAdminLoginTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function setUp(): void
+    {
+        parent::setUp();
 
-    /**
-     * A basic feature test example.
-     */
+        $this->seed();
+    }
+
+    public function test_wrong_data_login_peyvandtel_admin(): void
+    {
+        $this
+            ->post(route('peyvandtel.auth.login.login'), [
+                "username" => 'wrong',
+                "password" => 'wrong',
+                "model" => "testFailedModel"
+            ])
+            ->assertNotFound();
+
+        $this->assertDatabaseMissing('personal_access_tokens', ["tokenable_type" => PeyvandtelAdmin::class, "name" => "testFailedModel"]);
+    }
+
+    public function test_wrong_password_login_peyvandtel_admin(): void
+    {
+        $response = $this
+            ->post(route('peyvandtel.auth.login.login'), [
+                "username" => env('PEYVANDTEL_ADMIN_USERNAME'),
+                "password" => 'wrong',
+                "model" => "testFailedModel"
+            ])
+            ->assertUnprocessable();
+
+        $this->assertArrayHasKey("errors", $response);
+        $this->assertIsArray($response["errors"]);
+        $this->assertDatabaseMissing('personal_access_tokens', ["tokenable_type" => PeyvandtelAdmin::class, "name" => "testFailedModel"]);
+    }
+
     public function test_login_peyvandtel_admin(): void
     {
         $this->seed();

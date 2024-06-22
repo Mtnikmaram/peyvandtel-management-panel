@@ -5,12 +5,46 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * @OA\Schema(
+ *   schema="User",
+ *   @OA\Property(
+ *     property="id",
+ *     type="integer",
+ *     example="1",
+ *   ),
+ *   @OA\Property(
+ *     property="username",
+ *     type="string",
+ *     example="customer-one",
+ *   ),
+ *   @OA\Property(
+ *     property="name",
+ *     type="string",
+ *     example="نام کامل مشتری",
+ *   ),
+ *   @OA\Property(
+ *     property="credit",
+ *     type="integer",
+ *     example="1000000",
+ *   ),
+ *   @OA\Property(
+ *     property="phone",
+ *     type="string",
+ *     example="09123456789",
+ *   ),
+ *   @OA\Property(
+ *     property="credit_threshold",
+ *     type="integer",
+ *     example="100000",
+ *   ),
+ * )
+ */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory;
 
     /**
      * The attributes that are mass assignable.

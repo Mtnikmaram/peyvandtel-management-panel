@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-use Illuminate\Http\Response;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Response::macro('apiError', function (string $name, string $reason) {
-            return Response::json(['errors' => [$name ?? 'error' => [$reason]]], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return Response::json(['errors' => [$name ?? 'error' => [$reason]]], HttpResponse::HTTP_UNPROCESSABLE_ENTITY);
         });
     }
 }

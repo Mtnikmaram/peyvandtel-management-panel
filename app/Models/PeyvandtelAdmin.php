@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
@@ -25,7 +25,7 @@ use Laravel\Sanctum\HasApiTokens;
  *   ),
  * )
  */
-class PeyvandtelAdmin extends Model
+class PeyvandtelAdmin extends Authenticatable
 {
     use HasApiTokens;
 

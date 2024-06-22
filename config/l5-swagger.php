@@ -43,7 +43,7 @@ return [
                     base_path('app/Http/Controllers/Controller.php'),
                     base_path('app/Models'),
                     base_path('app/Http/Controllers/Auth/Peyvandtel'),
-                    // base_path('app/Http/Controllers/BackEnd/Peyvandtel'),
+                    base_path('app/Http/Controllers/BackEnd/Peyvandtel'),
                 ],
 
             ],
