@@ -200,4 +200,25 @@ class UsersTest extends TestCase
         $this->assertDatabaseMissing('users', ["id" => $userId, "password" => $user->password]);
         $this->assertDatabaseCount('users', $this->users->count());
     }
+
+    public function test_user_show()
+    {
+        $user = $this->users->first();
+        $userId = $user->id;
+
+        $this->get(route('peyvandtel.users.show', $userId))
+            ->assertOk()
+            ->assertJsonStructure([
+                "user" => [
+                    "id",
+                    "username",
+                    "phone",
+                    "name",
+                    "credit",
+                    "credit_threshold",
+                    "created_at",
+                    "updated_at",
+                ]
+            ]);
+    }
 }

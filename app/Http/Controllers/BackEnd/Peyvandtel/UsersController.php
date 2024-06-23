@@ -245,6 +245,13 @@ class UsersController extends Controller
      *          ref="#/components/schemas/UnauthorizedErrorResponse"
      *      )
      *  ),
+     *  @OA\Response(
+     *      response=404,
+     *      description="Not Found",
+     *      @OA\JsonContent(
+     *          type="object",
+     *      )
+     *  ),
      * )
      */
     public function update(UserUpdateRequest $request, User $user)
@@ -259,5 +266,61 @@ class UsersController extends Controller
         $user->save();
 
         return response()->noContent();
+    }
+
+
+    /**
+     * @OA\Get(
+     *   tags={"Users"},
+     *   path="/peyvandtel/users/{userId}",
+     *   summary="User show",
+     *   description="show detailed information of a user",
+     *   operationId="PeyvandtelAdminUsersShow",
+     *   security={{"sanctum":{}}},
+     *   @OA\Parameter(
+     *     name="userId",
+     *     in="path",
+     *     required=true,
+     *     @OA\Schema(type="integer")
+     *   ),
+     *   @OA\Response(
+     *      response=200, 
+     *      description="Success.",
+     *      @OA\JsonContent(
+     *        type="object",
+     *        @OA\Property(
+     *          property="user",
+     *          ref="#/components/schemas/User"
+     *        )
+     *     )
+     *   ),
+     *   @OA\Response(
+     *      response=422,
+     *      description="Validation error",
+     *      @OA\JsonContent(
+     *          ref="#/components/schemas/ValidationErrorResponse"
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=401,
+     *      description="Unauthorized",
+     *      @OA\JsonContent(
+     *          ref="#/components/schemas/UnauthorizedErrorResponse"
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=404,
+     *      description="Not Found",
+     *      @OA\JsonContent(
+     *          type="object",
+     *      )
+     *  ),
+     * )
+     */
+    public function show(User $user)
+    {
+        return response()->json([
+            "user" => $user
+        ]);
     }
 }

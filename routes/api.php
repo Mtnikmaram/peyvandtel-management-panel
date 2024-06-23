@@ -19,6 +19,7 @@ Route::prefix('peyvandtel')->name('peyvandtel.')->group(function () {
         //users
         Route::prefix('users')->controller(UsersController::class)->name('users.')->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::get('/{user}', 'show')->name('show');
             Route::post('/', 'store')->name('store');
             Route::patch('/{user}', 'update')->name('update');
         });
