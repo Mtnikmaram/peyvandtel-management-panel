@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BackEnd\Peyvandtel;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BackEnd\Peyvandtel\UsersStoreRequest;
+use App\Http\Requests\BackEnd\Peyvandtel\UserUpdateRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -172,5 +173,91 @@ class UsersController extends Controller
             return response()->json([
                 "password" => $password
             ]);
+    }
+
+    /**
+     * @OA\Patch(
+     *   tags={"Users"},
+     *   path="/peyvandtel/users/{userId}",
+     *   summary="Users Update",
+     *   operationId="PeyvandtelAdminUsersUpdate",
+     *   description="any data that is provided will be updated, others will remain untouched.",
+     *   security={{"sanctum":{}}},
+     *   @OA\Parameter(
+     *     name="userId",
+     *     in="path",
+     *     required=true,
+     *     @OA\Schema(type="integer")
+     *   ),
+     *   @OA\Parameter(
+     *     name="username",
+     *     in="query",
+     *     @OA\Schema(type="string")
+     *   ),
+     *   @OA\Parameter(
+     *     name="phone",
+     *     in="query",
+     *     @OA\Schema(type="string")
+     *   ),
+     *   @OA\Parameter(
+     *     name="name",
+     *     in="query",
+     *     @OA\Schema(type="string")
+     *   ),
+     *   @OA\Parameter(
+     *     name="credit",
+     *     in="query",
+     *     @OA\Schema(type="integer")
+     *   ),
+     *   @OA\Parameter(
+     *     name="credit_threshold",
+     *     in="query",
+     *     @OA\Schema(type="integer")
+     *   ),
+     *   @OA\Parameter(
+     *     name="password",
+     *     in="query",
+     *     @OA\Schema(type="string")
+     *   ),
+     *   @OA\Parameter(
+     *     name="password_confirmation",
+     *     in="query",
+     *     @OA\Schema(type="string")
+     *   ),
+     *   @OA\Response(
+     *      response=204, 
+     *      description="Success. No Content.",
+     *      @OA\JsonContent(
+     *        type="object",
+     *     )
+     *  ),
+     *  @OA\Response(
+     *      response=422,
+     *      description="Validation error",
+     *      @OA\JsonContent(
+     *          ref="#/components/schemas/ValidationErrorResponse"
+     *      )
+     *  ),
+     *  @OA\Response(
+     *      response=401,
+     *      description="Unauthorized",
+     *      @OA\JsonContent(
+     *          ref="#/components/schemas/UnauthorizedErrorResponse"
+     *      )
+     *  ),
+     * )
+     */
+    public function update(UserUpdateRequest $request, User $user)
+    {
+        $user->username = $request->username ?? $user->username;
+        $user->phone = $request->phone ?? $user->phone;
+        $user->name = $request->name ?? $user->name;
+        $user->credit = $request->credit ?? $user->credit;
+        $user->credit_threshold = $request->credit_threshold ?? $user->credit_threshold;
+        if ($request->password)
+            $user->password = Hash::make($request->password);
+        $user->save();
+
+        return response()->noContent();
     }
 }

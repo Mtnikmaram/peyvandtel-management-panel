@@ -170,4 +170,34 @@ class UsersTest extends TestCase
             ->assertUnprocessable()
             ->assertJsonValidationErrors(array_keys($data));
     }
+
+    public function test_user_update()
+    {
+        $user = $this->users->first();
+        $userId = $user->id;
+
+        $data = [
+            "username" => fake()->unique()->userName(),
+            "password" => "Password2024",
+            "name" => fake()->name(),
+            "phone" => fake()->unique()->mobileNumber(),
+            "credit" => $user->credit + 1000,
+            "credit_threshold" => 150000
+        ];
+
+        foreach ($data as $key => $value) {
+            $res = [$key => $value];
+            if ($key == "password")
+                $res["password_confirmation"] = $value;
+
+            $this
+                ->patch(route('peyvandtel.users.update', $userId), $res)
+                ->assertNoContent();
+        }
+
+        unset($data['password']);
+        $this->assertDatabaseHas('users', ["id" => $userId, ...$data]);
+        $this->assertDatabaseMissing('users', ["id" => $userId, "password" => $user->password]);
+        $this->assertDatabaseCount('users', $this->users->count());
+    }
 }
