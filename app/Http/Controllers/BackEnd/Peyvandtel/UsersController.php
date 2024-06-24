@@ -210,6 +210,12 @@ class UsersController extends Controller
      *     @OA\Schema(type="integer")
      *   ),
      *   @OA\Parameter(
+     *     name="credit_description",
+     *     in="query",
+     *     description="this description will be stored in user credit history. any additional information about the credit change must be inserted here.",
+     *     @OA\Schema(type="string",maxLength=250)
+     *   ),
+     *   @OA\Parameter(
      *     name="credit_threshold",
      *     in="query",
      *     @OA\Schema(type="integer")
@@ -256,6 +262,8 @@ class UsersController extends Controller
      */
     public function update(UserUpdateRequest $request, User $user)
     {
+        $oldCredit = $user->credit;
+
         $user->username = $request->username ?? $user->username;
         $user->phone = $request->phone ?? $user->phone;
         $user->name = $request->name ?? $user->name;
@@ -264,6 +272,17 @@ class UsersController extends Controller
         if ($request->password)
             $user->password = Hash::make($request->password);
         $user->save();
+
+        if ($user->wasChanged('credit')) {
+            $diff = $request->credit - $oldCredit;
+            $user->creditHistories()->create([
+                "type" => "admin_update",
+                "is_increase" => $diff > 0,
+                "amount" => intval(abs($diff)),
+                "updated_credit" => $user->credit,
+                "description" => $request->credit_description ?: null,
+            ]);
+        }
 
         return response()->noContent();
     }

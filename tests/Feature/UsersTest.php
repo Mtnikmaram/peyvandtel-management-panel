@@ -189,6 +189,8 @@ class UsersTest extends TestCase
             $res = [$key => $value];
             if ($key == "password")
                 $res["password_confirmation"] = $value;
+            elseif ($key == "credit")
+                $res["credit_description"] = "test change of credit";
 
             $this
                 ->patch(route('peyvandtel.users.update', $userId), $res)
@@ -199,6 +201,7 @@ class UsersTest extends TestCase
         $this->assertDatabaseHas('users', ["id" => $userId, ...$data]);
         $this->assertDatabaseMissing('users', ["id" => $userId, "password" => $user->password]);
         $this->assertDatabaseCount('users', $this->users->count());
+        $this->assertDatabaseHas('user_credit_histories', ["user_id" => $userId, "is_increase" => true, "type" => "admin_update", "amount" => 1000, "updated_credit" => $data["credit"], "description" => "test change of credit"]);
     }
 
     public function test_user_show()
