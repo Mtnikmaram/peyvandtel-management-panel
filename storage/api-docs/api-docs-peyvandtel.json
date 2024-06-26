@@ -93,6 +93,64 @@
                 }
             }
         },
+        "/peyvandtel/services": {
+            "get": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Services index",
+                "description": "fetch list of all available services with its information",
+                "operationId": "e762b89e2e71887cac370b70cf4b3755",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "users": {
+                                            "type": "object",
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/components/schemas/Pagination"
+                                                },
+                                                {
+                                                    "properties": {
+                                                        "data": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/components/schemas/User"
+                                                            }
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/peyvandtel/users": {
             "get": {
                 "tags": [
@@ -169,6 +227,16 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedErrorResponse"
                                 }
                             }
                         }
@@ -407,6 +475,15 @@
                         }
                     },
                     {
+                        "name": "credit_description",
+                        "in": "query",
+                        "description": "this description will be stored in user credit history. any additional information about the credit change must be inserted here.",
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 250
+                        }
+                    },
+                    {
                         "name": "credit_threshold",
                         "in": "query",
                         "schema": {
@@ -563,6 +640,27 @@
                     "username": {
                         "type": "string",
                         "example": "admin"
+                    }
+                },
+                "type": "object"
+            },
+            "Service": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "SAHAB_PARTAI_SPEACH_TO_TEXT"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "آوانگار (تبدیل گفتار به متن) Speech To Text"
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": "false"
+                    },
+                    "has_credential": {
+                        "type": "boolean",
+                        "example": "false"
                     }
                 },
                 "type": "object"

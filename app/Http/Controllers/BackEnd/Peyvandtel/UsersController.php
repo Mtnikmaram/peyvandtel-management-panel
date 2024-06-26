@@ -62,7 +62,14 @@ class UsersController extends Controller
      *          },
      *        )
      *     )
-     *   )
+     *   ),
+     *   @OA\Response(
+     *      response=401,
+     *      description="Unauthorized",
+     *      @OA\JsonContent(
+     *          ref="#/components/schemas/UnauthorizedErrorResponse"
+     *      )
+     *  ),
      * )
      */
     public function index(Request $request)

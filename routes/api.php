@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\Peyvandtel\LoginController;
+use App\Http\Controllers\BackEnd\Peyvandtel\ServicesController;
 use App\Http\Controllers\BackEnd\Peyvandtel\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,11 @@ Route::prefix('peyvandtel')->name('peyvandtel.')->group(function () {
             Route::get('/{user}', 'show')->name('show');
             Route::post('/', 'store')->name('store');
             Route::patch('/{user}', 'update')->name('update');
+        });
+
+        //users
+        Route::prefix('services')->controller(ServicesController::class)->name('services.')->group(function () {
+            Route::get('/', 'index')->name('index');
         });
     });
 });
