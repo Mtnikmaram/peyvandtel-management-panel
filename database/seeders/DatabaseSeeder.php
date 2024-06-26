@@ -12,7 +12,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->callOnce([
-            PeyvandtelAdminSeeder::class
+            PeyvandtelAdminSeeder::class,
+            ServicesSeeder::class
         ]);
     }
 }

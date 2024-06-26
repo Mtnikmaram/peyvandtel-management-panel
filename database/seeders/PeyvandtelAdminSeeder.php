@@ -14,10 +14,15 @@ class PeyvandtelAdminSeeder extends Seeder
     public function run(): void
     {
         PeyvandtelAdmin::query()
-            ->create([
-                "name" => "مدیریت نرم‌افزار",
-                "username" => env('PEYVANDTEL_ADMIN_USERNAME'),
-                "password" => Hash::make(env('PEYVANDTEL_ADMIN_PASSWORD'))
-            ]);
+            ->updateOrCreate(
+                [
+                    "username" => env('PEYVANDTEL_ADMIN_USERNAME')
+                ],
+                [
+                    "name" => "مدیریت نرم‌افزار",
+                    "username" => env('PEYVANDTEL_ADMIN_USERNAME'),
+                    "password" => Hash::make(env('PEYVANDTEL_ADMIN_PASSWORD'))
+                ]
+            );
     }
 }
