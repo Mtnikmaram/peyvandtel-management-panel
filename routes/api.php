@@ -28,6 +28,9 @@ Route::prefix('peyvandtel')->name('peyvandtel.')->group(function () {
         //users
         Route::prefix('services')->controller(ServicesController::class)->name('services.')->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::put('/{service}/credential/token', 'setTokenCredential')->name('setTokenCredential');
+            Route::put('/{service}/credential/usernamePassword', 'setUsernamePasswordCredential')->name('setUsernamePasswordCredential');
+            Route::put('/{service}/toggleActive', 'toggleActiveState')->name('toggleActive');
         });
     });
 });
