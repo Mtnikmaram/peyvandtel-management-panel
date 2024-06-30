@@ -9,5 +9,5 @@ interface ServiceValidatorInterface
     /**
      * @throws ServiceException
      */
-    public function validate(Service $service, int $amount, array $setting = null): bool;
+    public function validate(Service $service, int $amount, array $setting = null, bool $updating = false): bool;
 }

@@ -38,6 +38,8 @@ Route::prefix('peyvandtel')->name('peyvandtel.')->group(function () {
         Route::prefix('servicePrices')->controller(ServicePricesController::class)->name('servicePrices.')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/', 'store')->name('store');
+            Route::put('/{servicePrice}', 'update')->name('update');
+            Route::delete('/{servicePrice}', 'destroy')->name('destroy');
         });
     });
 });
