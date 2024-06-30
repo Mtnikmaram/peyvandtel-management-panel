@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use InvalidArgumentException;
+use OpenApi\Annotations as OA;
 
 /**
  * @OA\Schema(
@@ -36,9 +37,9 @@ use InvalidArgumentException;
 class Service extends Model
 {
     /*=================================== Static Properties ====================================*/
-    public static $services = [
+    public static array $services = [
         [
-            "id" => "SAHAB_PARTAI_SPEACH_TO_TEXT",
+            "id" => "SahabPartAISpeechToText",
             "name" => "آوانگار (تبدیل گفتار به متن) Speech To Text",
         ]
     ];
@@ -121,8 +122,8 @@ class Service extends Model
     protected function credential(): Attribute
     {
         return Attribute::make(
-            set: fn (string $value) => encrypt($value),
             get: fn (string $value) => decrypt($value),
+            set: fn (string $value) => encrypt($value),
         );
     }
 
@@ -141,21 +142,21 @@ class Service extends Model
     }
 
     /*=================================== Relationship ====================================*/
-    public function prices(): HasMany
+    public function price(): HasOne
     {
-        return $this->hasMany(ServicePrice::class, 'service_id');
+        return $this->hasOne(ServicePrice::class, 'service_id');
     }
 
     /*=================================== Static Methods ====================================*/
     /**
-     * generate a separator that does not exists in the $username and $password
+     * generate a separator that does not exist in the $username and $password
      * the Separator is in format of ==ps(a number)==
      */
     protected static function generateSeparatorForUsernamePassword(string $username, string $password): string
     {
         $separator = "==ps" . rand(0, 100) . "==";
         if (str_contains($username, $separator) || str_contains($password, $separator))
-            return self::generateSeparator($username, $password);
+            return self::generateSeparatorForUsernamePassword($username, $password);
         else
             return $separator;
     }

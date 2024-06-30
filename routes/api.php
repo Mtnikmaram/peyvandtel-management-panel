@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\Peyvandtel\LoginController;
+use App\Http\Controllers\BackEnd\Peyvandtel\ServicePricesController;
 use App\Http\Controllers\BackEnd\Peyvandtel\ServicesController;
 use App\Http\Controllers\BackEnd\Peyvandtel\UsersController;
 use Illuminate\Support\Facades\Route;
@@ -16,7 +17,7 @@ Route::prefix('peyvandtel')->name('peyvandtel.')->group(function () {
     });
 
     //routes that needs token
-    Route::middleware("auth:sanctum", "isPeyvandtelAdmin")->group(function () {
+    Route::middleware(["auth:sanctum", "isPeyvandtelAdmin"])->group(function () {
         //users
         Route::prefix('users')->controller(UsersController::class)->name('users.')->group(function () {
             Route::get('/', 'index')->name('index');
@@ -25,12 +26,18 @@ Route::prefix('peyvandtel')->name('peyvandtel.')->group(function () {
             Route::patch('/{user}', 'update')->name('update');
         });
 
-        //users
+        //services
         Route::prefix('services')->controller(ServicesController::class)->name('services.')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::put('/{service}/credential/token', 'setTokenCredential')->name('setTokenCredential');
             Route::put('/{service}/credential/usernamePassword', 'setUsernamePasswordCredential')->name('setUsernamePasswordCredential');
             Route::put('/{service}/toggleActive', 'toggleActiveState')->name('toggleActive');
+        });
+
+        //service prices
+        Route::prefix('servicePrices')->controller(ServicePricesController::class)->name('servicePrices.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
         });
     });
 });
