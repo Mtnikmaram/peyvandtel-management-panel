@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Observers\UserCreditHistoryObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
+#[ObservedBy([UserCreditHistoryObserver::class])]
 class UserCreditHistory extends Model
 {
     use HasFactory;
@@ -53,10 +57,18 @@ class UserCreditHistory extends Model
     ];
 
     /*=================================== Model Attributes ====================================*/
-    public function getOldCreditAttribute()
+    protected function oldCredit(): Attribute
     {
-        $amount = $this->is_increase ? $this->amount : -1 * $this->amount;
-        return $this->updated_credit + $amount;
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => $attributes["updated_credit"] + ($attributes["is_increase"] ? $attributes["amount"] : -1 * $attributes["amount"]),
+        );
+    }
+
+    protected function createdJal(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => jdate($attributes["created_at"])->format("Y-m-d H:i"),
+        );
     }
 
     /*=================================== Relationship ====================================*/
