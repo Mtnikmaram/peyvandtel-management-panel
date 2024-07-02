@@ -1,0 +1,275 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Peyvandtel Management Panel",
+        "description": "Peyvandtel Management Panel Api Documentation",
+        "contact": {
+            "name": "Peyvandtel",
+            "url": "https://peyvandtel.com",
+            "email": "info@peyvandtel.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/api"
+        }
+    ],
+    "paths": {
+        "/user/auth/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "login user via username & password",
+                "operationId": "283b1e1054ad689e37aa5250aa966685",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "model",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No User available",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ValidationErrorResponse": {
+                "properties": {
+                    "message": {
+                        "description": "the first error message and it also contains the count of other errors occurred",
+                        "type": "string",
+                        "example": "The propertyName is required. (and 1 more error)"
+                    },
+                    "errors": {
+                        "properties": {
+                            "propertyName": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "example": "The propertyName is required."
+                                },
+                                "collectionFormat": "multi"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "UnauthorizedErrorResponse": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Unauthenticated."
+                    }
+                },
+                "type": "object"
+            },
+            "Pagination": {
+                "properties": {
+                    "first_page_url": {
+                        "type": "string"
+                    },
+                    "last_page_url": {
+                        "type": "string"
+                    },
+                    "next_page_url": {
+                        "type": "string"
+                    },
+                    "prev_page_url": {
+                        "type": "string"
+                    },
+                    "path": {
+                        "type": "string"
+                    },
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer"
+                    },
+                    "to": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "PeyvandtelAdmin": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "مدیریت نرم‌افزار"
+                    },
+                    "username": {
+                        "type": "string",
+                        "example": "admin"
+                    }
+                },
+                "type": "object"
+            },
+            "Service": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "SAHAB_PARTAI_SPEACH_TO_TEXT"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "آوانگار (تبدیل گفتار به متن) Speech To Text"
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": "false"
+                    },
+                    "has_credential": {
+                        "type": "boolean",
+                        "example": "false"
+                    }
+                },
+                "type": "object"
+            },
+            "ServicePrice": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "service_id": {
+                        "type": "string",
+                        "example": "SERVICE_ID"
+                    },
+                    "amount": {
+                        "type": "integer",
+                        "example": "100"
+                    },
+                    "setting": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "": {
+                                    "properties": {
+                                        "key": {
+                                            "type": "string",
+                                            "example": "value"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "username": {
+                        "type": "string",
+                        "example": "customer-one"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "نام کامل مشتری"
+                    },
+                    "credit": {
+                        "type": "integer",
+                        "example": "1000000"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "09123456789"
+                    },
+                    "credit_threshold": {
+                        "type": "integer",
+                        "example": "100000"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "sanctum": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    }
+}

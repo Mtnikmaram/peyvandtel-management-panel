@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\Peyvandtel\LoginController;
+use App\Http\Controllers\Auth\User\LoginController as UserLoginController;
 use App\Http\Controllers\BackEnd\Peyvandtel\ServicePricesController;
 use App\Http\Controllers\BackEnd\Peyvandtel\ServicesController;
 use App\Http\Controllers\BackEnd\Peyvandtel\UsersController;
@@ -40,6 +41,17 @@ Route::prefix('peyvandtel')->name('peyvandtel.')->group(function () {
             Route::post('/', 'store')->name('store');
             Route::put('/{servicePrice}', 'update')->name('update');
             Route::delete('/{servicePrice}', 'destroy')->name('destroy');
+        });
+    });
+});
+
+
+//============================ USER ============================
+Route::prefix('user')->name('user.')->group(function () {
+    //authentication
+    Route::prefix('auth')->name('auth.')->group(function () {
+        Route::prefix('login')->controller(UserLoginController::class)->name('login.')->group(function () {
+            Route::post('/', 'login')->name('login');
         });
     });
 });

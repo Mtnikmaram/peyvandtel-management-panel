@@ -14,6 +14,7 @@ return [
                 */
                 'api' => 'api/peyvandtel/documentation',
                 'docs' => 'docs/peyvandtel',
+                'oauth2_callback' => '/api/peyvandtel/callback',
             ],
             'paths' => [
                 /*
@@ -44,6 +45,52 @@ return [
                     base_path('app/Models'),
                     base_path('app/Http/Controllers/Auth/Peyvandtel'),
                     base_path('app/Http/Controllers/BackEnd/Peyvandtel'),
+                ],
+
+            ],
+        ],
+        'user' => [
+            'api' => [
+                'title' => 'User API Documentation',
+            ],
+
+            'routes' => [
+                /*
+                 * Route for accessing api documentation interface
+                */
+                'api' => 'api/user/documentation',
+                'docs' => 'docs/user',
+                'oauth2_callback' => '/api/user/callback',
+            ],
+            'paths' => [
+                /*
+                 * Edit to include full URL in ui for assets
+                */
+                'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', true),
+
+                /*
+                 * File name of the generated json documentation file
+                */
+                'docs_json' => 'api-docs-user.json',
+
+                /*
+                 * File name of the generated YAML documentation file
+                */
+                'docs_yaml' => 'api-docs-user.yaml',
+
+                /*
+                * Set this to `json` or `yaml` to determine which documentation file to use in UI
+                */
+                'format_to_use_for_docs' => env('L5_FORMAT_TO_USE_FOR_DOCS', 'json'),
+
+                /*
+                 * Absolute paths to directory containing the swagger annotations are stored.
+                */
+                'annotations' => [
+                    base_path('app/Http/Controllers/Controller.php'),
+                    base_path('app/Models'),
+                    base_path('app/Http/Controllers/Auth/User'),
+                    // base_path('app/Http/Controllers/BackEnd/User'),
                 ],
 
             ],
