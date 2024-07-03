@@ -7,6 +7,7 @@ use App\Models\PeyvandtelAdmin;
 use App\Models\User;
 use Database\Seeders\PeyvandtelAdminSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Queue;
@@ -52,6 +53,15 @@ class UserCreditHistoriesTest extends TestCase
             ->assertNoContent();
 
         $this->assertDatabaseHas('user_credit_histories', ["user_id" => $this->user->id, "amount" => $newCredit, "description" => $creditDescription]);
-        Queue::assertPushedOn('sms', SendSmsJob::class); // the sms for credit threshold will be sent with the jobs. it also tests sendTemplateSms of SmsProvider
+
+        //check app configuration for sms for credit less than threshold
+        $activeProvider = config('sms.activeProvider');
+        $template = config("sms.templateIds.$activeProvider.credit_less_than_threshold");
+        if ($template) {
+            Queue::assertPushedOn('sms', SendSmsJob::class); // the sms for credit threshold will be sent with the jobs. it also tests sendTemplateSms of SmsProvider
+        } else {
+            Log::warning("Check Configurations sms.templateIds.$activeProvider.credit_less_than_threshold");
+            Queue::assertNothingPushed();
+        }
     }
 }

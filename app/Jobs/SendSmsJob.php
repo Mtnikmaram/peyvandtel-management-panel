@@ -56,7 +56,7 @@ class SendSmsJob implements ShouldQueue
         };
 
         if (!isset($request) || !$request->successful() || !call_user_func($this->isSuccessfulCallBack, $request->json())) {
-            Log::warning("Sms can not be sent.", ["status" => $request->status(), "req" => $request->json(), 'data' => $this->data, 'trace' => debug_backtrace()]);
+            Log::warning("Sms can not be sent.", ["status" => $request->status(), "req" => $request->json(), 'data' => $this->data]);
             $this->fail("Sms can not be sent. JSON:" . $request->body());
             return;
         }

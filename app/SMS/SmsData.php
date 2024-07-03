@@ -11,23 +11,18 @@ class SmsData
      * with message we should send a regular api call 
      * with template we must use tokens and send a predefined message in that provider
      */
-    private $reception; //string or array
-    private $message; //string or array
-    private $templateId; //string
-    private $tokens; //array of tokens used in template
+    private ?string $templateId;
 
-    public function __construct(string|array $reception, string|array $message = "", SmsTemplatesEnum $templateId = null, array $tokens = [])
-    {
+    public function __construct(
+        private string|array $reception,
+        private string|array|null $message = null,
+        SmsTemplatesEnum $templateId = null,
+        private array $tokens = []
+    ) {
         if (!is_numeric($reception) && !is_array($reception))
             throw new Exception("reception ($reception) does not have a valid format");
 
-        $this->reception = $reception;
-        $this->message = $message;
-        $this->templateId = $templateId;
-        if (is_array($tokens))
-            $this->tokens = $tokens;
-        else
-            $this->tokens = [];
+        $this->templateId = SmsProvider::getTemplateId($templateId);
     }
 
     public function getReception(): string|array
@@ -35,14 +30,14 @@ class SmsData
         return $this->reception;
     }
 
-    public function getMessage(): string|array
+    public function getMessage(): string|array|null
     {
         return $this->message;
     }
 
-    public function getTemplateId(): string
+    public function getTemplateId(): string|null
     {
-        return SmsProvider::getTemplateId($this->templateId);
+        return $this->templateId;
     }
 
     public function getTokens(): array

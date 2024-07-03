@@ -110,13 +110,15 @@ class FaraPayamak extends SmsProvider
 
     public function sendTemplateSms(): void
     {
+        $templateId = $this->smsData->getTemplateId();
+        if (!$templateId) return;
+
         $tokens = $this->smsData->getTokens();
         foreach ($tokens as $k => $t)
             $tokens[$k] = str_replace(";", "", $t);
         $data = [
             "to" => $this->smsData->getReception(),
-            "bodyId" => $this->smsData->getTemplateId(),
-
+            "bodyId" => $templateId,
             "text" => implode(";", $tokens),
         ];
         $this->sendRequestInQueue("BaseServiceNumber", $data);
@@ -124,8 +126,10 @@ class FaraPayamak extends SmsProvider
 
     public function sendSms(): void
     {
-        $phones = $this->smsData->getReception();
         $messages = $this->smsData->getMessage();
+        if (!$messages) return;
+
+        $phones = $this->smsData->getReception();
 
         //check if the phones is array so the messages must be array too vice versa
         if ((is_array($phones) && !is_array($messages)) || (!is_array($phones) && is_array($messages)) || (is_array($phones) && is_array($messages) && count($phones) != count($messages)))

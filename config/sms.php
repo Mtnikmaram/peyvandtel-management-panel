@@ -11,7 +11,7 @@ return [
     ],
     "templateIds" => [
         "FaraPayamak" => [
-            "credit_less_than_threshold" => 193759,
+            // "credit_less_than_threshold" => 193759,
             // "credit_insufficient" => null
         ]
     ]

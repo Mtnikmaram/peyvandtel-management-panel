@@ -4,6 +4,7 @@ namespace App\SMS;
 
 use App\SMS\Providers\FaraPayamak;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Abstract class for SMS providers.
@@ -63,14 +64,14 @@ abstract class SmsProvider
         }
     }
 
-    public static function getTemplateId(SmsTemplatesEnum $template): string
+    public static function getTemplateId(SmsTemplatesEnum $template): string|null
     {
         $templateKey = $template->value;
-        $provider = self::getActiveProvider();
-        $template = config("sms.templateIds.$provider.$templateKey");
-        throw_if(!$template, new Exception("The template id is not set for the active provider. active provider: $provider"));
 
-        return $template;
+        $provider = self::getActiveProvider();
+        $configTemplate = config("sms.templateIds.$provider.$templateKey");
+        Log::when(!$configTemplate)->error("The template ($template->name : $template->value) is not set for the active provider. active provider: $provider");
+        return $configTemplate ?: null;
     }
 
     private static function getActiveProvider(): string
