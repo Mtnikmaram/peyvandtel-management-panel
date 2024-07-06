@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
 use OpenApi\Annotations as OA;
 
@@ -43,6 +44,8 @@ class Service extends Model
             "name" => "آوانگار (تبدیل گفتار به متن) Speech To Text",
         ]
     ];
+
+    public static string $servicesRelatedFilesDirectory = "/uploads/services";
 
     /*=================================== Model Properties ====================================*/
     /**
@@ -183,5 +186,13 @@ class Service extends Model
         $password = substr(string: $hashed, offset: $index + $len);
 
         return ["username" => $username, "password" => $password];
+    }
+
+    public static function getDirectoryPath(string $uuid, string $disk = null)
+    {
+        $path = self::$servicesRelatedFilesDirectory . DIRECTORY_SEPARATOR . $uuid;
+        Storage::disk($disk)->makeDirectory($path);
+
+        return $path;
     }
 }

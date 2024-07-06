@@ -2,12 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\PeyvandtelAdmin;
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class PeyvandtelAdminMiddleware
+class IsUserMiddleware
 {
     /**
      * Handle an incoming request.
@@ -17,7 +17,7 @@ class PeyvandtelAdminMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user();
-        if ($user && $user instanceof PeyvandtelAdmin)
+        if ($user && $user instanceof User)
             return $next($request);
         else
             abort(Response::HTTP_UNAUTHORIZED);

@@ -90,7 +90,7 @@ return [
                     base_path('app/Http/Controllers/Controller.php'),
                     base_path('app/Models'),
                     base_path('app/Http/Controllers/Auth/User'),
-                    // base_path('app/Http/Controllers/BackEnd/User'),
+                    base_path('app/Http/Controllers/BackEnd/User'),
                 ],
 
             ],

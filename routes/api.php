@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\User\LoginController as UserLoginController;
 use App\Http\Controllers\BackEnd\Peyvandtel\ServicePricesController;
 use App\Http\Controllers\BackEnd\Peyvandtel\ServicesController;
 use App\Http\Controllers\BackEnd\Peyvandtel\UsersController;
+use App\Http\Controllers\BackEnd\User\ServicesController as UserServicesController;
 use Illuminate\Support\Facades\Route;
 
 //============================ PEYVANDTEL ============================
@@ -52,6 +53,14 @@ Route::prefix('user')->name('user.')->group(function () {
     Route::prefix('auth')->name('auth.')->group(function () {
         Route::prefix('login')->controller(UserLoginController::class)->name('login.')->group(function () {
             Route::post('/', 'login')->name('login');
+        });
+    });
+
+    //routes that needs token
+    Route::middleware(["auth:sanctum", "isUser"])->group(function () {
+        //services
+        Route::prefix('services')->controller(UserServicesController::class)->name('services.')->group(function () {
+            Route::post('/', 'store')->name('store');
         });
     });
 });
