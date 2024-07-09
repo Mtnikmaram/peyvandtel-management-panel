@@ -23,5 +23,6 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withSchedule(function (Schedule $schedule) {
         $schedule->command('sanctum:prune-expired --hours=24')->daily();
+        $schedule->command('sahabPartAiSpeechToText:checkTokens')->everyTwoMinutes();
     })
     ->create();
