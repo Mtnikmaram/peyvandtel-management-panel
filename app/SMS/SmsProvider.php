@@ -70,7 +70,7 @@ abstract class SmsProvider
 
         $provider = self::getActiveProvider();
         $configTemplate = config("sms.templateIds.$provider.$templateKey");
-        Log::when(!$configTemplate)->error("The template ($template->name : $template->value) is not set for the active provider. active provider: $provider");
+        Log::when(!$configTemplate)->emergency("The template ($template->name : $template->value) is not set for the active provider. active provider: $provider");
         return $configTemplate ?: null;
     }
 

@@ -45,7 +45,7 @@ class Service extends Model
         ]
     ];
 
-    public static string $servicesRelatedFilesDirectory = "/uploads/services";
+    private static string $servicesDirectory = "/uploads/services";
 
     /*=================================== Model Properties ====================================*/
     /**
@@ -188,11 +188,11 @@ class Service extends Model
         return ["username" => $username, "password" => $password];
     }
 
-    public static function getDirectoryPath(string $uuid, string $disk = null)
+    public static function getDirectoryPath()
     {
-        $path = self::$servicesRelatedFilesDirectory . DIRECTORY_SEPARATOR . $uuid;
-        Storage::disk($disk)->makeDirectory($path);
+        if (!Storage::directoryExists(self::$servicesDirectory))
+            Storage::makeDirectory(self::$servicesDirectory);
 
-        return $path;
+        return self::$servicesDirectory;
     }
 }

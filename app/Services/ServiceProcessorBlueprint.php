@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
+use App\Exceptions\UserCreditInsufficientFund;
 use Illuminate\Database\Eloquent\Model;
-use InvalidArgumentException;
 use RuntimeException;
 
 abstract class ServiceProcessorBlueprint
@@ -23,13 +23,13 @@ abstract class ServiceProcessorBlueprint
 
         $this->serviceDTO->setFinalServicePrice($this->calculate());
 
-        throw_if(!$this->checkCredit(), new InvalidArgumentException("Insufficient Credit", 422));
+        throw_if(!$this->checkCredit(), new UserCreditInsufficientFund($this->serviceDTO->getUser(), $this->serviceDTO->getFinalServicePrice()));
 
         $model = $this->storeInDB();
         throw_if(!$model || !$model instanceof Model, new RuntimeException("Internal Error", 500));
         $this->serviceDTO->setRelatedModel($model);
 
-        throw_if(!$this->executeTheService(), new RuntimeException("There was an error in storing the request", 422));
+        throw_if(!$this->executeTheService(), new RuntimeException("There was an error in executing the request", 422));
 
         $this->changeCredit();
     }

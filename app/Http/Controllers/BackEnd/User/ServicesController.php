@@ -18,6 +18,7 @@ class ServicesController extends Controller
      *   path="/user/services",
      *   summary="send a request for Sahab Part Speech To Text Service",
      *   security={{"sanctum":{}}},
+     *   description="the `serviceId` and `attachments` keys are preserved. anything other than these 2 will be considered as payload and it will be available on further requests with named `payload`. **DO NOT send any sensitive data.**",
      *   @OA\Parameter(
      *     name="serviceId",
      *     in="query",
@@ -30,7 +31,6 @@ class ServicesController extends Controller
      *   @OA\Parameter(
      *     name="payload",
      *     in="query",
-     *     description="the `serviceId` and `attachments` keys are preserved. anything other than these 2 will be considered as payload and it will be available on further requests with the key `payload`",
      *     @OA\Schema(
      *       type="object",
      *       @OA\AdditionalProperties(

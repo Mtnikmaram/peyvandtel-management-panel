@@ -90,7 +90,7 @@ final class ServiceDTO
         return $this;
     }
 
-    public function getRelatedModel(): Model
+    public function getRelatedModel(): ?Model
     {
         return $this->relatedModel;
     }

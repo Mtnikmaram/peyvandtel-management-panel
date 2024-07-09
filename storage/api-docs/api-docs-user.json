@@ -94,6 +94,7 @@
                     "Services"
                 ],
                 "summary": "send a request for Sahab Part Speech To Text Service",
+                "description": "the `serviceId` and `attachments` keys are preserved. anything other than these 2 will be considered as payload and it will be available on further requests with named `payload`. **DO NOT send any sensitive data.**",
                 "operationId": "bd86bbf93cd4476787242b9429aaf019",
                 "parameters": [
                     {
@@ -110,7 +111,6 @@
                     {
                         "name": "payload",
                         "in": "query",
-                        "description": "the `serviceId` and `attachments` keys are preserved. anything other than these 2 will be considered as payload and it will be available on further requests with the key `payload`",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {

@@ -21,11 +21,29 @@ class ServiceFactory
         return new $className();
     }
 
+    /**
+     * @param ServiceDTO $serviceDTO
+     *
+     * @throws \Throwable
+     */
     public static function execute(ServiceDTO $serviceDTO): void
     {
         $className = "App\\Services\\Processors\\" . $serviceDTO->getServiceId() . "Processor";
         throw_if(!class_exists($className), new Exception("processor class does not exist", 500));
         /** @var ServiceProcessorBlueprint $processor */
         (new $className())->setServiceDTO($serviceDTO)->execute();
+    }
+
+    /**
+     * @param Service $service
+     * @param mixed $apiResponse
+     * 
+     * @return bool
+     */
+    public static function verifyApiResponse(Service $service, mixed $apiResponse): bool
+    {
+        $className = "App\\Services\\Processors\\" . $service->id . "Processor";
+        throw_if(!class_exists($className), new Exception("processor class does not exist", 500));
+        return !method_exists($className, 'verifyApiResponse') || (new $className())->verifyApiResponse($apiResponse);
     }
 }
