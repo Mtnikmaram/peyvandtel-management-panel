@@ -7,7 +7,7 @@ use App\Http\Requests\BackEnd\Peyvandtel\ServicePriceUpdateRequest;
 use App\Http\Requests\BackEnd\Peyvandtel\ServicePricesStoreRequest;
 use App\Models\Service;
 use App\Models\ServicePrice;
-use App\Services\ServiceException;
+use App\Exceptions\ServiceException;
 use App\Services\ServiceFactory;
 use Illuminate\Http\Request;
 use OpenApi\Annotations as OA;

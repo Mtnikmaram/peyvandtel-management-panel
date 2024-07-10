@@ -3,7 +3,7 @@
 namespace App\Services\Validators;
 
 use App\Models\Service;
-use App\Services\ServiceException;
+use App\Exceptions\ServiceException;
 use App\Services\ServiceValidatorInterface;
 
 class SahabPartAISpeechToTextValidator implements ServiceValidatorInterface
