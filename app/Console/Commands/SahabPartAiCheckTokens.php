@@ -15,7 +15,7 @@ class SahabPartAiCheckTokens extends Command
      *
      * @var string
      */
-    protected $signature = 'sahabPartAiSpeechToText:checkTokens';
+    protected $signature = 'services:sahabPartAiSpeechToTextCheckTokens';
 
     /**
      * The console command description.
