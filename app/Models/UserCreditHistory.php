@@ -20,7 +20,7 @@ class UserCreditHistory extends Model
      */
     protected $appends = [
         'old_credit',
-        'created_jal',
+        'created_at_jal',
     ];
 
     /**
@@ -43,8 +43,7 @@ class UserCreditHistory extends Model
      * @var array<int, string>
      */
     protected $hidden = [
-        'created_at',
-        'updated_at',
+        'user_id',
     ];
 
     /**
@@ -64,7 +63,7 @@ class UserCreditHistory extends Model
         );
     }
 
-    protected function createdJal(): Attribute
+    protected function createdAtJal(): Attribute
     {
         return Attribute::make(
             get: fn (mixed $value, array $attributes) => jdate($attributes["created_at"])->format("Y-m-d H:i"),

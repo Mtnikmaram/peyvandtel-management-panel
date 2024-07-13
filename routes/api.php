@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\User\LoginController as UserLoginController;
 use App\Http\Controllers\BackEnd\Peyvandtel\ServicePricesController;
 use App\Http\Controllers\BackEnd\Peyvandtel\ServicesController;
 use App\Http\Controllers\BackEnd\Peyvandtel\UsersController;
+use App\Http\Controllers\BackEnd\User\CreditHistoryController as UserCreditHistoryController;
 use App\Http\Controllers\BackEnd\User\ServicesController as UserServicesController;
 use Illuminate\Support\Facades\Route;
 
@@ -63,6 +64,11 @@ Route::prefix('user')->name('user.')->group(function () {
             Route::get('/{service}', 'index')->name('index');
             Route::post('/', 'store')->name('store');
             Route::get('/{service}/{id}', 'show')->name('show');
+        });
+
+        //credit history
+        Route::prefix('creditHistory')->controller(UserCreditHistoryController::class)->name('services.')->group(function () {
+            Route::get('/', 'index')->name('index');
         });
     });
 });

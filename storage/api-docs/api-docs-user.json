@@ -88,6 +88,89 @@
                 }
             }
         },
+        "/user/creditHistory": {
+            "get": {
+                "tags": [
+                    "CreditHistories"
+                ],
+                "summary": "CreditHistory index",
+                "description": "fetch a paginated list of a user's credit history",
+                "operationId": "UserCreditHistoryIndex",
+                "parameters": [
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "it must contain a Date (Y/m/d)",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "it must contain a Date (Y/m/d)",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "creditHistory": {
+                                            "type": "object",
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/components/schemas/Pagination"
+                                                },
+                                                {
+                                                    "properties": {
+                                                        "data": {
+                                                            "type": "array",
+                                                            "items": {}
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/user/services/{serviceId}": {
             "get": {
                 "tags": [
@@ -119,7 +202,7 @@
                     {
                         "name": "payload",
                         "in": "query",
-                        "description": "search in the payload",
+                        "description": "search in the payload. payload must contain this value",
                         "schema": {
                             "type": "string"
                         }
@@ -539,6 +622,10 @@
         {
             "name": "Authentication",
             "description": "Authentication"
+        },
+        {
+            "name": "CreditHistories",
+            "description": "CreditHistories"
         },
         {
             "name": "Services",
