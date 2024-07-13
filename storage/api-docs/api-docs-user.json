@@ -88,6 +88,100 @@
                 }
             }
         },
+        "/user/services/{serviceId}": {
+            "get": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Services index",
+                "description": "fetch a paginated list of a specific service",
+                "operationId": "UserServicesIndex",
+                "parameters": [
+                    {
+                        "name": "serviceId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "SahabPartAISpeechToText"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "it must contain a DateTime (Y/m/d H:i). The result will be filtered for those after this DateTime.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "payload",
+                        "in": "query",
+                        "description": "search in the payload",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "result": {
+                                            "type": "object",
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/components/schemas/Pagination"
+                                                },
+                                                {
+                                                    "properties": {
+                                                        "data": {
+                                                            "type": "array",
+                                                            "items": {}
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/user/services": {
             "post": {
                 "tags": [
@@ -95,7 +189,7 @@
                 ],
                 "summary": "send a request for Sahab Part Speech To Text Service",
                 "description": "the `serviceId` and `attachments` keys are preserved. anything other than these 2 will be considered as payload and it will be available on further requests with named `payload`. **DO NOT send any sensitive data.**",
-                "operationId": "bd86bbf93cd4476787242b9429aaf019",
+                "operationId": "UserServicesStore",
                 "parameters": [
                     {
                         "name": "serviceId",
@@ -154,6 +248,87 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/user/services/{serviceId}/{id}": {
+            "get": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Services show",
+                "description": "fetch a detail information of one a specific service",
+                "operationId": "UserServicesShow",
+                "parameters": [
+                    {
+                        "name": "serviceId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "SahabPartAISpeechToText"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "payload",
+                        "in": "query",
+                        "description": "search in the payload",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "result": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
                                 }
                             }
                         }
@@ -364,6 +539,14 @@
         {
             "name": "Authentication",
             "description": "Authentication"
+        },
+        {
+            "name": "Services",
+            "description": "Services"
+        },
+        {
+            "name": "Services",
+            "description": "Services"
         },
         {
             "name": "Services",

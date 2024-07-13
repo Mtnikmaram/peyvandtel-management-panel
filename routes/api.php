@@ -60,7 +60,9 @@ Route::prefix('user')->name('user.')->group(function () {
     Route::middleware(["auth:sanctum", "isUser"])->group(function () {
         //services
         Route::prefix('services')->controller(UserServicesController::class)->name('services.')->group(function () {
+            Route::get('/{service}', 'index')->name('index');
             Route::post('/', 'store')->name('store');
+            Route::get('/{service}/{id}', 'show')->name('show');
         });
     });
 });

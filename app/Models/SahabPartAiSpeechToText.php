@@ -45,6 +45,7 @@ class SahabPartAiSpeechToText extends Model
      * @var array<int, string>
      */
     protected $hidden = [
+        'user_id',
         'file',
     ];
 

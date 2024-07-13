@@ -46,4 +46,11 @@ class ServiceFactory
         throw_if(!class_exists($className), new Exception("processor class does not exist", 500));
         return !method_exists($className, 'verifyApiResponse') || (new $className())->verifyApiResponse($apiResponse);
     }
+
+    public static function getServiceRepository(Service $service, User $user): ServicesRepositoryInterface
+    {
+        $className = "App\\Services\\Repositories\\" . $service->id . "Repository";
+        throw_if(!class_exists($className), new Exception("repository class does not exist", 500));
+        return (new $className())->setUser($user);
+    }
 }
