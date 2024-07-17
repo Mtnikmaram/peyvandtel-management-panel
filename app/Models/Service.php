@@ -45,6 +45,13 @@ class Service extends Model
         ]
     ];
 
+    public static array $serviceNames = [
+        [
+            "id" => "SahabPartAISpeechToText",
+            "name" => "VoiceToText",
+        ]
+    ];
+
     private static string $servicesDirectory = "/uploads/services";
 
     /*=================================== Model Properties ====================================*/
@@ -151,6 +158,13 @@ class Service extends Model
     }
 
     /*=================================== Static Methods ====================================*/
+    public static function getClassByShownName(string $name, bool $onlyId = false): self|string
+    {
+        $service = collect(self::$serviceNames)->where('name', $name)->first();
+        throw_if(!$service, new InvalidArgumentException("wrong name specified"));
+        if ($onlyId) return $service['id'];
+        return self::query()->active()->find($service['id']);
+    }
     /**
      * generate a separator that does not exist in the $username and $password
      * the Separator is in format of ==ps(a number)==

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\BackEnd\User;
 
+use App\Models\Service;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
@@ -15,12 +16,11 @@ class ServiceStoreRequest extends FormRequest
      */
     public function rules(): array
     {
+        $names = collect(Service::$serviceNames)->pluck('name');
         return [
             "serviceId" => [
                 "required",
-                Rule::exists('services', 'id')
-                    ->whereNotNull('credentials')
-                    ->where('active', 1)
+                Rule::in($names)
             ],
             "attachments" => "nullable|array",
             "attachments.*" => [

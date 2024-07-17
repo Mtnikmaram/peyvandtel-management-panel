@@ -187,7 +187,7 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "SahabPartAISpeechToText"
+                                "VoiceToText"
                             ]
                         }
                     },
@@ -281,7 +281,7 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "SahabPartAISpeechToText"
+                                "VoiceToText"
                             ]
                         }
                     },
@@ -369,7 +369,7 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "SahabPartAISpeechToText"
+                                "VoiceToText"
                             ]
                         }
                     },

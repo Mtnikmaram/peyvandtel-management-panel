@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use InvalidArgumentException;
 
 class ServicesController extends Controller
 {
@@ -29,7 +30,7 @@ class ServicesController extends Controller
      *     required=true,
      *     @OA\Schema(
      *       type="string",
-     *       enum={"SahabPartAISpeechToText"},
+     *       enum={"VoiceToText"},
      *     )
      *   ),
      *   @OA\Parameter(
@@ -84,13 +85,15 @@ class ServicesController extends Controller
      *  ),
      * )
      */
-    public function index(Request $request, Service $service)
+    public function index(Request $request, string $service)
     {
         $user = $request->user();
 
         try {
-            $repository = ServiceFactory::getServiceRepository($service, $user);
-        } catch (Exception $e) {
+            $serviceModel = Service::getClassByShownName($service);
+            $repository = ServiceFactory::getServiceRepository($serviceModel, $user);
+        } catch (Exception | InvalidArgumentException $e) {
+            Log::critical('service repository', ['serviceName' => $service, "message" => $e->getMessage()]);
             return response()->apiError("service Repository", $e->getMessage());
         }
 
@@ -123,7 +126,7 @@ class ServicesController extends Controller
      *     required=true,
      *     @OA\Schema(
      *       type="string",
-     *       enum={"SahabPartAISpeechToText"},
+     *       enum={"VoiceToText"},
      *     )
      *   ),
      *   @OA\Parameter(
@@ -178,8 +181,15 @@ class ServicesController extends Controller
     {
         $payload = $request->except('serviceId', 'attachments');
 
+        try {
+            $serviceId = Service::getClassByShownName($request->serviceId, true);
+        } catch (Exception | InvalidArgumentException $e) {
+            Log::critical('service store failed', ['request' => $request->all(), "message" => $e->getMessage()]);
+        }
+
+
         $dto = new ServiceDTO(
-            $request->serviceId,
+            $serviceId,
             $request->user(),
             $payload,
             $request->attachments ?: []
@@ -209,7 +219,7 @@ class ServicesController extends Controller
      *     required=true,
      *     @OA\Schema(
      *       type="string",
-     *       enum={"SahabPartAISpeechToText"},
+     *       enum={"VoiceToText"},
      *     )
      *   ),
      *   @OA\Parameter(
@@ -255,13 +265,15 @@ class ServicesController extends Controller
      *  ),
      * )
      */
-    public function show(Request $request, Service $service, string $id)
+    public function show(Request $request, string $service, string $id)
     {
         $user = $request->user();
 
         try {
-            $repository = ServiceFactory::getServiceRepository($service, $user);
-        } catch (Exception $e) {
+            $serviceModel = Service::getClassByShownName($service);
+            $repository = ServiceFactory::getServiceRepository($serviceModel, $user);
+        } catch (Exception | InvalidArgumentException $e) {
+            Log::critical('service repository', ['serviceName' => $service, "message" => $e->getMessage()]);
             return response()->apiError("service Repository", $e->getMessage());
         }
 
