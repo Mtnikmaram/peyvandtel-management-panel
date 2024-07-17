@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Response::macro('apiError', function (string $name, string $reason) {
-            return Response::json(['errors' => [$name ?? 'error' => [$reason]]], HttpResponse::HTTP_UNPROCESSABLE_ENTITY);
+            return Response::json(['message' => $reason, 'errors' => [$name ?? 'error' => [$reason]]], HttpResponse::HTTP_UNPROCESSABLE_ENTITY);
         });
 
         Json::encodeUsing(fn ($value) => json_encode(value: $value, flags: JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK));

@@ -79,9 +79,9 @@ class SendRequestSahabPartAiSpeechToTextJob implements ShouldQueue
                 ->withHeaders([
                     'gateway-token' => $credential
                 ])
-                ->attach(
+                ->attach( // make request a MultiPart request 
                     'file',
-                    file_get_contents($filePath),
+                    file_get_contents($filePath), // absolute path to file
                     basename($filePath)
                 )
                 ->post('https://partai.gw.isahab.ir/speechRecognition/v1/largeFile', [
