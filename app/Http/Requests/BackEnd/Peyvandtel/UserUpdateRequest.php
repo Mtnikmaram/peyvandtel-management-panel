@@ -18,7 +18,7 @@ class UserUpdateRequest extends FormRequest
             "username" => "sometimes|unique:users,username," . $this->user->id,
             "password" => ["sometimes", "confirmed", Password::min(8)->mixedCase()->numbers()],
             "phone" => "bail|sometimes|numeric|digits:11|starts_with:09|unique:users,phone," . $this->user->id,
-            "credit" => "sometimes|min:" . $this->user->credit,
+            "credit" => "sometimes|numeric|min:" . $this->user->credit,
             "credit_threshold" => "sometimes|numeric|min:1000",
         ];
     }

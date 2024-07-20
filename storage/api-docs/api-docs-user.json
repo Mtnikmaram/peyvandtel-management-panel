@@ -320,6 +320,11 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "properties": {
+                                        "model_id": {
+                                            "type": "string"
+                                        }
+                                    },
                                     "type": "object"
                                 }
                             }

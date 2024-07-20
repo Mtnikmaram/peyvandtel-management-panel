@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BackEnd\User;
 
+use App\Exceptions\UserCreditInsufficientFund;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BackEnd\User\ServiceStoreRequest;
 use App\Models\Service;
@@ -201,6 +202,8 @@ class ServicesController extends Controller
 
         try {
             $serviceDto = ServiceFactory::execute($dto);
+        } catch (UserCreditInsufficientFund $e) {
+            return response()->apiError("credit", $e->getMessage());
         } catch (Exception $e) {
             Log::critical("service store failed", ["message" => $e->getMessage(), "request" => $request->all, "user" => $request->user(), "file" => $e->getFile(), "line" => $e->getLine()]);
             return response()->apiError("exception", $e->getMessage());
