@@ -26,12 +26,12 @@ class ServiceFactory
      *
      * @throws \Throwable
      */
-    public static function execute(ServiceDTO $serviceDTO): void
+    public static function execute(ServiceDTO $serviceDTO): ServiceDTO
     {
         $className = "App\\Services\\Processors\\" . $serviceDTO->getServiceId() . "Processor";
         throw_if(!class_exists($className), new Exception("processor class does not exist", 500));
         /** @var ServiceProcessorBlueprint $processor */
-        (new $className())->setServiceDTO($serviceDTO)->execute();
+        return (new $className())->setServiceDTO($serviceDTO)->execute();
     }
 
     /**

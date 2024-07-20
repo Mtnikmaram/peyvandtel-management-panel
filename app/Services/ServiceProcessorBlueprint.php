@@ -17,7 +17,7 @@ abstract class ServiceProcessorBlueprint
         return $this;
     }
 
-    public function execute(): void
+    public function execute(): ServiceDTO
     {
         $this->validate();
 
@@ -32,6 +32,8 @@ abstract class ServiceProcessorBlueprint
         throw_if(!$this->executeTheService(), new RuntimeException("There was an error in executing the request", 422));
 
         $this->changeCredit();
+
+        return $this->serviceDTO;
     }
 
     abstract protected function validate(): void;

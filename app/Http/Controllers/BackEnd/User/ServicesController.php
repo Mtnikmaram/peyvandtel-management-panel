@@ -159,6 +159,10 @@ class ServicesController extends Controller
      *      description="Success. Created.",
      *      @OA\JsonContent(
      *        type="object",
+     *        @OA\Property(
+     *          property="model_id",
+     *          type="string",
+     *        )
      *     )
      *   ),
      *   @OA\Response(
@@ -196,13 +200,17 @@ class ServicesController extends Controller
         );
 
         try {
-            ServiceFactory::execute($dto);
+            $serviceDto = ServiceFactory::execute($dto);
         } catch (Exception $e) {
             Log::critical("service store failed", ["message" => $e->getMessage(), "request" => $request->all, "user" => $request->user(), "file" => $e->getFile(), "line" => $e->getLine()]);
             return response()->apiError("exception", $e->getMessage());
         }
 
-        return response()->noContent(Response::HTTP_CREATED);
+        return response()
+            ->json(
+                ["model_id" => $serviceDto->getRelatedModel()->getKey()],
+                Response::HTTP_CREATED
+            );
     }
 
     /**
