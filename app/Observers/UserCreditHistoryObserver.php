@@ -20,7 +20,7 @@ class UserCreditHistoryObserver
             SmsProvider::getProvider()
                 ->setData(
                     new SmsData(
-                        reception: "09335012118",
+                        reception: $user->phone,
                         templateId: SmsTemplatesEnum::CreditLessThanThreshold,
                         tokens: [$user->name]
                     )
