@@ -16,7 +16,16 @@ class SahabPartAiSpeechToTextCreditCommand implements UserCreditHistoryCommandIn
      */
     public static function getTypeName(): string
     {
-        return "Services|SahabPartAiSpeechToText";
+        return "Services|VoiceToText";
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    public static function getTypeShownName(): string
+    {
+        return "سرویس تبدیل صوت به متن";
     }
 
     /**

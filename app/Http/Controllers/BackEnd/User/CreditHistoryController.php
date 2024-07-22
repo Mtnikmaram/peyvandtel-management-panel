@@ -83,7 +83,6 @@ class CreditHistoryController extends Controller
 
         try {
             $to = $request->to ? Carbon::createFromFormat("Y/m/d", $request->to) : null;
-            // dd($from,$to);
         } catch (Exception) {
             $to = null;
         }
@@ -93,7 +92,7 @@ class CreditHistoryController extends Controller
             ->latest()
             ->when($from, fn ($q) => $q->whereDate("created_at", ">=", $from->format("Y-m-d")))
             ->when($to && !$to->isFuture(), fn ($q) => $q->whereDate("created_at", "<=", $to->format("Y-m-d")))
-            ->paginate(15);
+            ->paginate(20);
         $histories
             ->getCollection()
             ->each->makeHidden(['id']);

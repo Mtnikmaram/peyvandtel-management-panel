@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 interface UserCreditHistoryCommandInterface
 {
     public static function getTypeName(): string;
+
+    public static function getTypeShownName(): string;
     
     public static function execute(User $user, int $amount, string $description = null): UserCreditHistory;
 

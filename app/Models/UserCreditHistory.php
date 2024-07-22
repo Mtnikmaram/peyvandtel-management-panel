@@ -31,6 +31,7 @@ class UserCreditHistory extends Model
     protected $fillable = [
         'user_id',
         'type',
+        'type_name',
         'is_increase',
         'amount',
         'updated_credit',
@@ -59,14 +60,14 @@ class UserCreditHistory extends Model
     protected function oldCredit(): Attribute
     {
         return Attribute::make(
-            get: fn (mixed $value, array $attributes) => $attributes["updated_credit"] + ($attributes["is_increase"] ? $attributes["amount"] : -1 * $attributes["amount"]),
+            get: fn (mixed $value, array $attributes) => $attributes["updated_credit"] + ($attributes["is_increase"] ? -1 * $attributes["amount"] :  $attributes["amount"]),
         );
     }
 
     protected function createdAtJal(): Attribute
     {
         return Attribute::make(
-            get: fn (mixed $value, array $attributes) => jdate($attributes["created_at"])->format("Y-m-d H:i"),
+            get: fn (mixed $value, array $attributes) => jdate($attributes["created_at"])->format("Y/m/d | H:i"),
         );
     }
 

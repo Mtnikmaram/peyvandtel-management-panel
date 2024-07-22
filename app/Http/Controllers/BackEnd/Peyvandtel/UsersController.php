@@ -284,6 +284,7 @@ class UsersController extends Controller
             $diff = $request->credit - $oldCredit;
             $user->creditHistories()->create([
                 "type" => "admin_update",
+                "type_name" => "تغییر توسط مدیریت",
                 "is_increase" => $diff > 0,
                 "amount" => intval(abs($diff)),
                 "updated_credit" => $user->credit,
