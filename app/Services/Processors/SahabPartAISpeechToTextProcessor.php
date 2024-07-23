@@ -32,7 +32,7 @@ class SahabPartAISpeechToTextProcessor extends ServiceProcessorBlueprint
     {
         $file = $this->serviceDTO->getFiles()[0];
         $length = (new VoiceFileHelper($file))->getDuration();
-        throw_if($length === null, new Exception("Couldn't calculate the file duration"));
+        throw_if($length === null || $length <= 0, new Exception("Couldn't calculate the file duration"));
         $this->serviceDTO->setAdditionalData("length", $length);
 
         $service = $this->serviceDTO->getService();

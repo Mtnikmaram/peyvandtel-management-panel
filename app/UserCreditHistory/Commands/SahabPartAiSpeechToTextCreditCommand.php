@@ -80,6 +80,7 @@ class SahabPartAiSpeechToTextCreditCommand implements UserCreditHistoryCommandIn
             ->creditHistories()
             ->create([
                 "type" => self::getTypeName(),
+                "type_name" => self::getTypeShownName(),
                 "is_increase" => 1,
                 "amount" => $amount,
                 "updated_credit" => $user->credit,
