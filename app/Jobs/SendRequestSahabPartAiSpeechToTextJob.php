@@ -55,8 +55,7 @@ class SendRequestSahabPartAiSpeechToTextJob implements ShouldQueue
      */
     public function __construct(
         public SahabPartAiSpeechToText $model
-    ) {
-    }
+    ) {}
 
     /**
      * Execute the job.
@@ -76,17 +75,22 @@ class SendRequestSahabPartAiSpeechToTextJob implements ShouldQueue
             $filePath = Storage::path($this->model->filePath);
 
             $response = Http::acceptJson()
+                ->timeout(90)
+                ->withOptions([
+                    'allow_redirects' => true, // Follow redirects
+                    'expect' => false, // Disable the 'Expect: 100-continue' header
+                ])
                 ->withHeaders([
                     'gateway-token' => $credential
                 ])
                 ->attach( // make request a MultiPart request 
                     'file',
-                    file_get_contents($filePath), // absolute path to file
+                    fopen($filePath, 'rb'), // absolute path to file
                     basename($filePath)
                 )
                 ->post('https://partai.gw.isahab.ir/speechRecognition/v1/largeFile', [
-                    "language" => "fa",
-                    "model" => "telephony"
+                    'language' => 'fa',
+                    'model' => 'telephony',
                 ]);
         } catch (Exception $e) {
             $this->fail($e);
