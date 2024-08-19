@@ -67,7 +67,7 @@ Route::prefix('user')->name('user.')->group(function () {
         });
 
         //credit history
-        Route::prefix('creditHistory')->controller(UserCreditHistoryController::class)->name('services.')->group(function () {
+        Route::prefix('creditHistory')->controller(UserCreditHistoryController::class)->name('creditHistory.')->group(function () {
             Route::get('/', 'index')->name('index');
         });
     });
