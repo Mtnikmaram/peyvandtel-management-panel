@@ -20,3 +20,5 @@ yarn-error.log
 /.idea
 /.vscode
 /.history
+.uploadToServer.sh
+.git-ftp-ignore

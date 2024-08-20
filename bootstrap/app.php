@@ -24,5 +24,15 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withSchedule(function (Schedule $schedule) {
         $schedule->command('sanctum:prune-expired --hours=24')->daily();
         $schedule->command('services:sahabPartAiSpeechToTextCheckTokens')->everyTwoMinutes();
+
+        $schedule->command('queue:work --once --queue=services')
+            ->everyMinute()
+            ->withoutOverlapping()
+            ->appendOutputTo(storage_path() . '/logs/queue-jobs-services.log');
+
+        $schedule->command('queue:work --once --queue=sms')
+            ->everyMinute()
+            ->withoutOverlapping()
+            ->appendOutputTo(storage_path() . '/logs/queue-jobs-sms.log');
     })
     ->create();
