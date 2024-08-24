@@ -35,7 +35,7 @@ class PeyvandtelAdminLoginTest extends TestCase
     {
         $response = $this
             ->post(route('peyvandtel.auth.login.login'), [
-                "username" => env('PEYVANDTEL_ADMIN_USERNAME'),
+                "username" => config('peyvandtelAdmin.credential.username'),
                 "password" => 'wrong',
                 "model" => "testFailedModel"
             ])
@@ -52,8 +52,8 @@ class PeyvandtelAdminLoginTest extends TestCase
 
         $response = $this
             ->post(route('peyvandtel.auth.login.login'), [
-                "username" => env('PEYVANDTEL_ADMIN_USERNAME'),
-                "password" => env("PEYVANDTEL_ADMIN_PASSWORD"),
+                "username" => config('peyvandtelAdmin.credential.username'),
+                "password" => config('peyvandtelAdmin.credential.password'),
                 "model" => "testModel"
             ])
             ->assertSuccessful()

@@ -16,12 +16,12 @@ class PeyvandtelAdminSeeder extends Seeder
         PeyvandtelAdmin::query()
             ->updateOrCreate(
                 [
-                    "username" => env('PEYVANDTEL_ADMIN_USERNAME')
+                    "username" => config('peyvandtelAdmin.credential.username')
                 ],
                 [
                     "name" => "مدیریت نرم‌افزار",
-                    "username" => env('PEYVANDTEL_ADMIN_USERNAME'),
-                    "password" => Hash::make(env('PEYVANDTEL_ADMIN_PASSWORD'))
+                    "username" => config('peyvandtelAdmin.credential.username'),
+                    "password" => Hash::make(config('peyvandtelAdmin.credential.password'))
                 ]
             );
     }
