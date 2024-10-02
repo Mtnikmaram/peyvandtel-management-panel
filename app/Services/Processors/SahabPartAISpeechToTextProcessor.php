@@ -85,7 +85,7 @@ class SahabPartAISpeechToTextProcessor extends ServiceProcessorBlueprint
             $model->refresh();
             $this->serviceDTO
                 ->setResultIsReady()
-                ->setFinalResult(["text" => $model->result['text']]);
+                ->setFinalResult($model->result);
         } else {
             SendRequestSahabPartAiSpeechToTextJob::dispatch($model)
                 ->afterCommit() // it will be created when the transaction started in the storeToDB is committed in changeCredit, in case any problem happens on changing the credit
