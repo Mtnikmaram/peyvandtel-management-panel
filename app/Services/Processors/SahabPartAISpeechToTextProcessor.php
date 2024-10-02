@@ -80,10 +80,18 @@ class SahabPartAISpeechToTextProcessor extends ServiceProcessorBlueprint
         $model = $this->serviceDTO->getRelatedModel() ?: SahabPartAiSpeechToText::query()->find($this->serviceDTO->uuid);
         throw_if(!$model, new RuntimeException("There was an error in fetching data from db"));
 
-        SendRequestSahabPartAiSpeechToTextJob::dispatch($model)
-            ->afterCommit() // it will be created when the transaction started in the storeToDB is committed in changeCredit, in case any problem happens on changing the credit
-            ->delay(now()->addSeconds(5))
-            ->onQueue('services');
+        if ($model->is_short_file) {
+            SendRequestSahabPartAiSpeechToTextJob::dispatchSync($model);
+            $model->refresh();
+            $this->serviceDTO
+                ->setResultIsReady()
+                ->setFinalResult(["text" => $model->result['text']]);
+        } else {
+            SendRequestSahabPartAiSpeechToTextJob::dispatch($model)
+                ->afterCommit() // it will be created when the transaction started in the storeToDB is committed in changeCredit, in case any problem happens on changing the credit
+                ->delay(now()->addSeconds(5))
+                ->onQueue('services');
+        }
 
         return true;
     }
@@ -105,29 +113,56 @@ class SahabPartAISpeechToTextProcessor extends ServiceProcessorBlueprint
         return true;
     }
 
-    public function verifyApiResponse(mixed $response): bool
+    public function verifyApiResponse(mixed $response, bool $isShortFileResponse = false): bool
     {
-        /*
-         * [
-         *   "data" =>  [
-         *       "status" => "success",
-         *       "data" => [
-         *           "token" => "token_********"
-         *       ],
-         *       "requestId" => "**********"
-         *   ],
-         *   "meta" => [
-         *       "shamsiDate" => "140304*********",
-         *       "requestId" => "*********"
-         *   ],
-         * ]
-         */
-        return is_array($response) &&
-            isset($response["data"]) &&
-            isset($response["data"]["status"], $response["data"]["data"]) &&
-            $response["data"]["status"] === "success" &&
-            is_array($response["data"]["data"]) &&
-            count($response["data"]["data"]) &&
-            isset($response["data"]["data"]["token"]);
+        if ($isShortFileResponse) {
+            /*
+            * [
+            *   "data" =>  [
+            *       "status" => "success",
+            *       "data" => [
+            *           "result" => '....',
+            *           "time_stamp" => [],
+            *       ],
+            *       "requestId" => "**********"
+            *   ],
+            *   "meta" => [
+            *       "shamsiDate" => "140304*********",
+            *       "requestId" => "*********"
+            *   ],
+            * ]
+            */
+            return is_array($response) &&
+                isset($response["data"]) &&
+                isset($response["data"]["status"], $response["data"]["data"]) &&
+                $response["data"]["status"] === "success" &&
+                is_array($response["data"]["data"]) &&
+                count($response["data"]["data"]) &&
+                isset($response["data"]["data"]["result"]);
+        } else {
+
+            /*
+            * [
+            *   "data" =>  [
+            *       "status" => "success",
+            *       "data" => [
+            *           "token" => "token_********"
+            *       ],
+            *       "requestId" => "**********"
+            *   ],
+            *   "meta" => [
+            *       "shamsiDate" => "140304*********",
+            *       "requestId" => "*********"
+            *   ],
+            * ]
+            */
+            return is_array($response) &&
+                isset($response["data"]) &&
+                isset($response["data"]["status"], $response["data"]["data"]) &&
+                $response["data"]["status"] === "success" &&
+                is_array($response["data"]["data"]) &&
+                count($response["data"]["data"]) &&
+                isset($response["data"]["data"]["token"]);
+        }
     }
 }

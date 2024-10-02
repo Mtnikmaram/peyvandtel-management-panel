@@ -70,6 +70,8 @@ class SendRequestSahabPartAiSpeechToTextJob implements ShouldQueue
 
         $credential = $service->credential; // token
 
+        $url = $this->model->is_short_file ? 'file' : 'largeFile';
+
         $response = null;
         try {
             $filePath = Storage::path($this->model->filePath);
@@ -88,7 +90,8 @@ class SendRequestSahabPartAiSpeechToTextJob implements ShouldQueue
                     fopen($filePath, 'rb'), // absolute path to file
                     basename($filePath)
                 )
-                ->post('https://partai.gw.isahab.ir/speechRecognition/v1/largeFile', [
+                ->baseUrl('https://partai.gw.isahab.ir/speechRecognition/v1/')
+                ->post($url, [
                     'language' => 'fa',
                     'model' => 'telephony',
                 ]);
@@ -104,18 +107,36 @@ class SendRequestSahabPartAiSpeechToTextJob implements ShouldQueue
         }
 
         $responseArray = (array)$response->json();
-        if (!ServiceFactory::verifyApiResponse($service, $responseArray)) {
+        if (!ServiceFactory::verifyApiResponse($service, $responseArray, $this->model->is_short_file)) {
             Log::critical('speechRecognition not valid response', ["status" => $response->status(), "body" => $response->body()]);
             $this->fail(new Exception("speechRecognition not valid response"));
             return;
         }
 
         try {
-            $token = $responseArray["data"]["data"]["token"];
-            $this->model->update([
-                "status" => SahabPartAiSpeechToText::$statuses[1],
-                "result" => ["token" => $token]
-            ]);
+            if ($this->model->is_short_file) {
+                $responseArray = $responseArray["data"];
+                $result = [
+                    "text" => $responseArray["data"]["result"]
+                ];
+                $result["timestamps"] = isset($responseArray["data"]["time_stamp"]) ? $responseArray["data"]["time_stamp"] : null;
+                if (isset($responseArray["data"]["data"])) {
+                    unset($responseArray["data"]["data"]["filePath"]);
+                    $result["data"] = $responseArray["data"]["data"];
+                }
+
+
+                $this->model->update([
+                    "status" => SahabPartAiSpeechToText::$statuses[3],
+                    "result" => $result,
+                ]);
+            } else {
+                $token = $responseArray["data"]["data"]["token"];
+                $this->model->update([
+                    "status" => SahabPartAiSpeechToText::$statuses[1],
+                    "result" => ["token" => $token]
+                ]);
+            }
         } catch (Exception $e) {
             $this->fail($e);
             return;

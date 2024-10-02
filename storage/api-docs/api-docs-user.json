@@ -323,6 +323,12 @@
                                     "properties": {
                                         "model_id": {
                                             "type": "string"
+                                        },
+                                        "result_is_ready": {
+                                            "type": "boolean"
+                                        },
+                                        "result": {
+                                            "type": "mixed"
                                         }
                                     },
                                     "type": "object"

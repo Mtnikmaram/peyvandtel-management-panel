@@ -40,11 +40,11 @@ class ServiceFactory
      * 
      * @return bool
      */
-    public static function verifyApiResponse(Service $service, mixed $apiResponse): bool
+    public static function verifyApiResponse(Service $service, ...$arguments): bool
     {
         $className = "App\\Services\\Processors\\" . $service->id . "Processor";
         throw_if(!class_exists($className), new Exception("processor class does not exist", 500));
-        return !method_exists($className, 'verifyApiResponse') || (new $className())->verifyApiResponse($apiResponse);
+        return !method_exists($className, 'verifyApiResponse') || (new $className())->verifyApiResponse(...$arguments);
     }
 
     public static function getServiceRepository(Service $service, User $user): ServicesRepositoryInterface

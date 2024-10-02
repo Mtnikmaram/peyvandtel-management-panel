@@ -16,6 +16,8 @@ final class ServiceDTO
     private int $finalServicePrice = -1;
     private array $additionalData = [];
     private ?Model $relatedModel = null;
+    private bool $resultReady = false;
+    private mixed $finalResult = null;
 
     public function __construct(
         private string $serviceId,
@@ -93,5 +95,27 @@ final class ServiceDTO
     public function getRelatedModel(): ?Model
     {
         return $this->relatedModel;
+    }
+
+    public function setResultIsReady(): self
+    {
+        $this->resultReady = true;
+        return $this;
+    }
+
+    public function getResultStatus(): bool
+    {
+        return $this->resultReady;
+    }
+
+    public function setFinalResult(mixed $value): self
+    {
+        $this->finalResult = $value;
+        return $this;
+    }
+
+    public function getFinalResult(): mixed
+    {
+        return $this->finalResult;
     }
 }

@@ -70,6 +70,13 @@ class SahabPartAiSpeechToText extends Model
         );
     }
 
+    protected function isShortFile(): Attribute
+    {
+        return Attribute::make(
+            get: fn(mixed $value, array $attributes) => $attributes["file_length"] < 60,
+        );
+    }
+
 
     /*=================================== Relationship ====================================*/
     public function user(): BelongsTo

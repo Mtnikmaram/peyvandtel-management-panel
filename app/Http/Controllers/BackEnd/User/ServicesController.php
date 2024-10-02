@@ -163,7 +163,15 @@ class ServicesController extends Controller
      *        @OA\Property(
      *          property="model_id",
      *          type="string",
-     *        )
+     *        ),
+     *        @OA\Property(
+     *          property="result_is_ready",
+     *          type="boolean",
+     *        ),
+     *        @OA\Property(
+     *          property="result",
+     *          type="mixed",
+     *        ),
      *     )
      *   ),
      *   @OA\Response(
@@ -211,7 +219,11 @@ class ServicesController extends Controller
 
         return response()
             ->json(
-                ["model_id" => $serviceDto->getRelatedModel()->getKey()],
+                [
+                    "model_id" => $serviceDto->getRelatedModel()->getKey(),
+                    "result_is_ready" => $serviceDto->getResultStatus(),
+                    "result" => $serviceDto->getResultStatus() ? $serviceDto->getFinalResult() : null
+                ],
                 Response::HTTP_CREATED
             );
     }
